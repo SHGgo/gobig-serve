@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--扫描Controller,并将其生命周期纳入Spring管理-->
+    <context:annotation-config/>
+
+    <!--只扫描controller层注解-->
+    <context:component-scan base-package="top.gobig.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--主要作用于@Controller激活该模式下面是一种简写形式
+          它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
+          是spring MVC为@Controllers分发请求所必须的   -->
+    <mvc:annotation-driven/>
+
+    <!-- 消息转换器，添加对文字编码的全局处理 -->
+    <!--<mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/plain;charset=UTF-8"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>-->
+
+    <mvc:default-servlet-handler/>
+
+
+    <!-- freemarker的配置 -->
+    <!--<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value=""/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="locale">zh_CN</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="number_format">0.################</prop>
+            </props>
+        </property>
+    </bean>
+&lt;!&ndash;    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean"/>&ndash;&gt;
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <property name="contentType" value="text/html; charset=utf-8"/>
+        <property name="cache" value="true"/>
+&lt;!&ndash;        <property name="prefix" value="/h/"/>&ndash;&gt;
+        <property name="suffix" value=".html"/>
+        <property name="order" value="0"/>
+    </bean>-->
+
+    <!-- 配置JSP视图 -->
+    <!--<bean id="viewResolverJsp"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/" />
+        <property name="suffix" value=".html" />
+        <property name="order" value="2"/>
+    </bean>-->
+
+    <!-- 文件上传配置注意:这里申明的id必须为multipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="524288000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!--必须写临时存放文件的路径-->
+        <property name="uploadTempDir" value="upload/temp"/>
+    </bean>
+
+</beans>

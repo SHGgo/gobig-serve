@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.gobig.mapper.VideoMapper">
+    <resultMap id="BaseResultMap" type="top.gobig.pojo.Video">
+        <id column="vid" jdbcType="INTEGER" property="vid"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="introduction" jdbcType="VARCHAR" property="introduction"/>
+        <result column="sort_name" jdbcType="VARCHAR" property="sortName"/>
+        <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate"/>
+        <result column="view_count" jdbcType="INTEGER" property="viewCount"/>
+        <result column="comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="collect_count" jdbcType="INTEGER" property="collectCount"/>
+        <result column="pic" jdbcType="VARCHAR" property="pic"/>
+        <result column="video_res" jdbcType="VARCHAR" property="videoRes"/>
+        <result column="v_score" jdbcType="INTEGER" property="vScore"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from video
+        where vid = #{vid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="top.gobig.pojo.Video">
+        <selectKey keyProperty="vid" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into video (title, uid, author,
+        introduction, sort_name, release_date,
+        view_count, comment_count, collect_count,
+        pic, video_res, v_score
+        )
+        values (#{title,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR},
+        #{introduction,jdbcType=VARCHAR}, #{sortName,jdbcType=VARCHAR}, #{releaseDate,jdbcType=TIMESTAMP},
+        #{viewCount,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER}, #{collectCount,jdbcType=INTEGER},
+        #{pic,jdbcType=VARCHAR}, #{videoRes,jdbcType=VARCHAR}, #{vScore,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="top.gobig.pojo.Video">
+        update video
+        set title         = #{title,jdbcType=VARCHAR},
+            uid           = #{uid,jdbcType=INTEGER},
+            author        = #{author,jdbcType=VARCHAR},
+            introduction  = #{introduction,jdbcType=VARCHAR},
+            sort_name     = #{sortName,jdbcType=VARCHAR},
+            release_date  = #{releaseDate,jdbcType=TIMESTAMP},
+            view_count    = #{viewCount,jdbcType=INTEGER},
+            comment_count = #{commentCount,jdbcType=INTEGER},
+            collect_count = #{collectCount,jdbcType=INTEGER},
+            pic           = #{pic,jdbcType=VARCHAR},
+            video_res     = #{videoRes,jdbcType=VARCHAR},
+            v_score       = #{vScore,jdbcType=INTEGER}
+        where vid = #{vid,jdbcType=INTEGER}
+    </update>
+    <select id="selectByVid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select vid,
+               title,
+               uid,
+               author,
+               introduction,
+               sort_name,
+               release_date,
+               view_count,
+               comment_count,
+               collect_count,
+               pic,
+               video_res,
+               v_score
+        from video
+        where vid = #{vid,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select vid,
+               title,
+               uid,
+               author,
+               introduction,
+               sort_name,
+               release_date,
+               view_count,
+               comment_count,
+               collect_count,
+               pic,
+               video_res,
+               v_score
+        from video
+    </select>
+
+    <select id="selectByUid" resultMap="BaseResultMap">
+        select vid,
+               title,
+               uid,
+               author,
+               introduction,
+               sort_name,
+               release_date,
+               view_count,
+               comment_count,
+               collect_count,
+               pic,
+               video_res,
+               v_score
+        from video v
+        where v.uid = #{uid}
+        limit #{videoNum}
+    </select>
+
+    <select id="selectBySortName" resultMap="BaseResultMap" parameterType="top.gobig.util.GDao">
+        select vid, title, uid, author, introduction, sort_name, release_date, view_count,
+        comment_count, collect_count, pic, video_res, v_score
+        from video v
+        where v.sort_name = #{dao.sortName}
+        <choose>
+            <when test="dao.pageStart!=null">
+                limit #{dao.pageStart},#{dao.videoNum}
+            </when>
+            <when test="dao.videoNum!=null">
+                limit #{dao.videoNum}
+            </when>
+        </choose>
+    </select>
+
+    <select id="selectByScore" resultMap="BaseResultMap" parameterType="top.gobig.util.GDao">
+        select vid,
+               title,
+               uid,
+               author,
+               introduction,
+               sort_name,
+               release_date,
+               view_count,
+               comment_count,
+               collect_count,
+               pic,
+               video_res,
+               v_score
+        from video v
+        order by v.v_score desc
+        limit #{dao.pageStart},#{dao.videoNum}
+    </select>
+
+    <select id="selectTotal" resultType="java.lang.Integer">
+        select count(*)
+        from video
+    </select>
+
+    <select id="selectSortVideoTotal" resultType="java.lang.Integer">
+        select count(*)
+        from video v
+        where v.sort_name = #{dao.sortName}
+    </select>
+
+    <select id="selectByIndex" resultMap="BaseResultMap">
+        select *
+        from video v
+        <if test="dao.sortName!=null">
+            where v.sort_name = #{dao.sortName}
+        </if>
+        limit #{dao.index},#{dao.videoNum}
+    </select>
+
+
+    <select id="selectByKeyWord" resultMap="BaseResultMap">
+        select *
+        from video v
+        where v.title like CONCAT('%',#{dao.searchKeyWord},'%')
+         or v.author like CONCAT('%', #{dao.searchKeyWord}, '%')
+        limit #{dao.pageStart},#{dao.videoNum}
+    </select>
+
+    <select id="selectByKeyWordCount" resultType="java.lang.Integer">
+        select count(*)
+        from video v
+        where v.title like CONCAT('%',#{dao.searchKeyWord},'%')
+           or v.author like CONCAT('%', #{dao.searchKeyWord}, '%')
+    </select>
+
+</mapper>

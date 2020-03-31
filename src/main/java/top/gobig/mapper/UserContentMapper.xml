@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.gobig.mapper.UserContentMapper">
+  <resultMap id="BaseResultMap" type="top.gobig.pojo.UserContent">
+    <id column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="figure" jdbcType="VARCHAR" property="figure" />
+    <result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+    <result column="attention_count" jdbcType="INTEGER" property="attentionCount" />
+    <result column="fan_count" jdbcType="INTEGER" property="fanCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from usercontent
+    where uid = #{uid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.gobig.pojo.UserContent">
+    <selectKey keyProperty="uid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into usercontent (uid, nick_name, gender, 
+      signature, figure, birth_date, 
+      attention_count, fan_count, like_count, 
+      view_count)
+    values (#{uid,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, 
+      #{signature,jdbcType=VARCHAR}, #{figure,jdbcType=VARCHAR}, #{birthDate,jdbcType=TIMESTAMP}, 
+      #{attentionCount,jdbcType=INTEGER}, #{fanCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, 
+      #{viewCount,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="top.gobig.pojo.UserContent">
+    update usercontent
+    set nick_name = #{nickName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      figure = #{figure,jdbcType=VARCHAR},
+      birth_date = #{birthDate,jdbcType=TIMESTAMP},
+      attention_count = #{attentionCount,jdbcType=INTEGER},
+      fan_count = #{fanCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER},
+      view_count = #{viewCount,jdbcType=INTEGER}
+    where uid = #{uid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select uid, nick_name, gender, signature, figure, birth_date, attention_count, fan_count, 
+    like_count, view_count
+    from usercontent
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select uid, nick_name, gender, signature, figure, birth_date, attention_count, fan_count, 
+    like_count, view_count
+    from usercontent
+  </select>
+</mapper>
