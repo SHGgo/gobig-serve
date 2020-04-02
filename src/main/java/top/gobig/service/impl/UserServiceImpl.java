@@ -11,13 +11,14 @@ import top.gobig.pojo.UserContent;
 import top.gobig.pojo.Video;
 import top.gobig.service.UserService;
 import top.gobig.util.GDao;
+import top.gobig.util.JwtUtils;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -57,101 +58,57 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String userLogin(User user, HttpServletRequest request) {
+    public Map<Object, Object> userLogin(User user, HttpServletRequest request) {
         HashMap<Object, Object> map = new HashMap<>();
-        HttpSession session = request.getSession();
         User resUser = userMapper.selectByUserAccountAndPwd(user);
-        if (resUser != null && session != null) {
-            session.setAttribute("uid", resUser.getUid());
-            session.setAttribute("userAccount", resUser.getUserAccount());
-            session.setAttribute("pwd", resUser.getPwd());
-            System.out.println("=========session==========");
-            System.out.println("userLoginsession.getId() = " + session.getId());
-            //获取session所有信息
-            /*Enumeration<String> attrs = session.getAttributeNames();
-            while(attrs.hasMoreElements()){
-                // 获取session键值
-                String name1 = attrs.nextElement().toString();
-                // 根据键值取session中的值
-                Object vakue = session.getAttribute(name1);
-                // 打印结果
-                System.out.println("------" + name1 + ":" + vakue +"--------\n");
-            }*/
-            //获取session所有信息
+        if (resUser != null) {
+            String token = JwtUtils.createToken(String.valueOf(resUser.getUid()));
             map.put("status","200");
-            map.put("sessionId",session.getId());
-            return "success";
+            map.put("token",token);
+            return map;
         } else {
-            return "false";
+            map.put("status","500");
+            return map;
         }
     }
 
     @Override
-    public String userConditionCheck(HttpServletRequest request) {
+    public Map<Object, Object> userConditionCheck(HttpServletRequest request) {
+        Map<Object, Object> map = new HashMap<>();
         //TODO 登录验证
-        Cookie[] cookies = request.getCookies();
-        HttpSession session = request.getSession(false);
-        int flag = 0;
-        if (cookies == null || session == null) {
-            for (Cookie cookie : cookies) {
-                System.out.println("1cookieValue ---- " + cookie.getValue());
-            }
-            return "noLogged";
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            map.put("status","401");//没登录
         } else {
-            for (Cookie cookie : cookies) {
-                System.out.println("cookieName ---- " + cookie.getName());
-                /*if (cookie.getName().equals("JSESSIONID")) {
-                    System.out.println("userConditionCheckJSESSIONID = " + cookie.getValue());
-                }*/
-                if (cookie.getName().equals("userAccount")) {
-                    String userAccount = cookie.getValue();
-//                    System.out.println("userAccount = " + userAccount);
-                    String suserAccount = (String) session.getAttribute("userAccount");
-//                    System.out.println("suserAccount = " + suserAccount);
-                    if (!userAccount.equals(suserAccount)) {
-                        System.out.println("2");
-                        return "noLogged";
-                    } else {
-                        flag++;
-                    }
-                } else if (cookie.getName().equals("pwd")) {
-                    String pwd = cookie.getValue();
-                    String spwd = (String) session.getAttribute("pwd");
-                    if (!pwd.equals(spwd)) {
-                        System.out.println("3");
-                        return "noLogged";
-                    } else {
-                        flag++;
-                    }
-                }
-            }
-            if (flag == 2) {
-                return "logged";
-            } else {
-                System.out.println("4");
-                return "noLogged";
+            if (JwtUtils.verifyToken(token)==1){
+                HttpSession session = request.getSession();
+                session.setAttribute("uid",JwtUtils.parseToken(token).get("sub"));
+                map.put("status","200");
+            }else {
+                map.put("status","400"); //token错误
             }
         }
+        return map;
     }
 
-
+    /**
+     * dao.getNum()=0获取user本人信息，>0获取其他人信息
+     */
     @Override
     public UserContent getUserContent(GDao dao, HttpServletRequest request) {
-        if (dao != null && dao.getNum() > 0) {//TODO
+        if (dao != null && dao.getNum() > 0) {
             UserContent resUserContent = userContentMapper.selectByPrimaryKey(dao.getNum());
             return resUserContent;
         } else {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                System.out.println("getUserContentSessionUid = " + session.getAttribute("uid"));
-                Integer uid = null;
-                uid = (int) session.getAttribute("uid");
-                System.out.println("uid = " + uid);
+            String token = request.getHeader("Authorization");
+            if (token!=null&&JwtUtils.verifyToken(token)==1){
+                Integer uid= Integer.parseInt((String) JwtUtils.parseToken(token).get("sub"));
                 UserContent resUserContent = userContentMapper.selectByPrimaryKey(uid);
                 return resUserContent;
+            }else {
+                return null;
             }
         }
-        return null;
     }
 
     @Override

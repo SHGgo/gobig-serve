@@ -1,5 +1,3 @@
-
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +9,11 @@ import top.gobig.mapper.UserVideoCollectMapper;
 import top.gobig.pojo.User;
 import top.gobig.pojo.UserContent;
 import top.gobig.service.UserService;
+import top.gobig.util.JwtUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
@@ -24,6 +25,8 @@ public class TestUser {
     UserService userService;
     @Autowired
     UserContentMapper userContentMapper;
+    @Autowired
+    UserVideoCollectMapper userVideoCollectMapper;
 
     @Test
     public void selectByUserAccountAndPwdTest() {
@@ -51,13 +54,27 @@ public class TestUser {
     }
 
 
-    @Autowired
-    UserVideoCollectMapper userVideoCollectMapper;
+
     @Test
-    public void selectUidByVidme() {
+    public void selectUidByVid() {
         Integer uid = 1;
         Integer videoCollectNum = 9;
         List<Integer> integers = userVideoCollectMapper.selectVidByUid(uid,videoCollectNum);
         System.out.println("integers = " + integers);
     }
+
+    @Test
+    public void TestJwt() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", 1002);
+        map.put("userName", "张晓明");
+        map.put("age", 12);
+        map.put("address", "山东省青岛市李沧区");
+        String token = JwtUtils.createToken("123");
+        Map<String, Object> stringObjectMap = JwtUtils.parseToken(token);
+        System.out.println(stringObjectMap.get("sub"));
+        int i = JwtUtils.verifyToken(token);
+        System.out.println(i);
+    }
+
 }

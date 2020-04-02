@@ -42,17 +42,17 @@ public class UserController {
     }
 
     @RequestMapping("/userLogin")
-    public String userLogin(@RequestBody User user) throws Exception {
+    public Map<Object, Object> userLogin(@RequestBody User user) throws Exception {
         System.out.println("userLoginController:"+user.toString());
-        String res = userService.userLogin(user,request);
-        return res;
+        Map<Object, Object> map = userService.userLogin(user, request);
+        return map;
     }
 
     @RequestMapping("/userConditionCheck")
-    public String userConditionCheck() {
+    public Map<Object, Object> userConditionCheck() {
         System.out.println("========userConditionCheck===========");
-        String userCondition = userService.userConditionCheck(request);
-        return userCondition;
+        Map<Object, Object> map = userService.userConditionCheck(request);
+        return map;
     }
 
     @RequestMapping("/getUserContent")
