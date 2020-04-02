@@ -7,17 +7,18 @@ import top.gobig.util.GDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     User selectByid(int id);
 
     String userRegister(User user);
 
-    String userLogin(User user, HttpServletRequest request);
+    Map<Object, Object> userLogin(User user, HttpServletRequest request);
 
-    public String userConditionCheck(HttpServletRequest request);
+    Map<Object, Object> userConditionCheck(HttpServletRequest request);
 
-    public UserContent getUserContent(GDao num, HttpServletRequest request);
+    UserContent getUserContent(GDao num, HttpServletRequest request);
 
-    public List<Video> getUserVideoCollect(GDao num);
+    List<Video> getUserVideoCollect(GDao num);
 }
