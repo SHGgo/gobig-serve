@@ -43,6 +43,19 @@ public class JwtUtils {
         return builder.compact();
     }
 
+    public static String createToken(Map<String, Object> claimMap) {
+        long currentTimeMillis  = System.currentTimeMillis();
+        Date now = new Date(currentTimeMillis);
+        JwtBuilder builder = Jwts.builder()
+                .setId(UUID.randomUUID().toString()) //是JWT的唯一标识，根据业务需要，这个可以设置为一个不重复的值，主要用来作为一次性token,从而回避重放攻击。
+                .setIssuer("gobig")     // 签发者
+                .setIssuedAt(now)       // jwt的签发时间
+                .setClaims(claimMap)    // 自定义的内容
+                .signWith(key)          // 密匙
+                .setExpiration(new Date(currentTimeMillis+TOKEN_EXPIRE_MILLIS));       // 过期时间
+        return builder.compact();
+    }
+
     public static String createToken(String subject) {
         long currentTimeMillis  = System.currentTimeMillis();
         Date now = new Date(currentTimeMillis);

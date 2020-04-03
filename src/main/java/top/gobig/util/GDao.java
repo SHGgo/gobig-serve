@@ -29,4 +29,7 @@ public class GDao {
 
     MultipartFile file;
 
+    private String username;
+    private String password;
+
 }

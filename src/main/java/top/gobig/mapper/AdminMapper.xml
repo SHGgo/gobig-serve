@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.gobig.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="top.gobig.pojo.Admin">
+    <id column="aid" jdbcType="INTEGER" property="aid" />
+    <result column="admin_account" jdbcType="VARCHAR" property="adminAccount" />
+    <result column="admin_password" jdbcType="VARCHAR" property="adminPassword" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where aid = #{aid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.gobig.pojo.Admin">
+    <selectKey keyProperty="aid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into admin (admin_account, admin_password)
+    values (#{adminAccount,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="top.gobig.pojo.Admin">
+    update admin
+    set admin_account = #{adminAccount,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR}
+    where aid = #{aid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select aid, admin_account, admin_password
+    from admin
+    where aid = #{aid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select aid, admin_account, admin_password
+    from admin
+  </select>
+
+  <select id="selectByAdminAccountAndPwd" resultMap="BaseResultMap">
+    select * from  admin a
+    where a.admin_account=#{adminAccount} and a.admin_password=#{adminPassword}
+  </select>
+</mapper>
