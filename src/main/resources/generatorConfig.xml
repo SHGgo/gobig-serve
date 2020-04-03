@@ -43,10 +43,10 @@ mvn mybatis-generator:generate
         <!--            <property name="my.isgen.usekeys" value="true"/>-->
         <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--        </table>-->
-        <table tableName="comment" domainObjectName="Comment" enableCountByExample="false" enableUpdateByExample="false"
+        <table tableName="admincontent" domainObjectName="AdminContent" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
             <!--type=post and identity=true 的时候生成的 <selectKey>中的order=AFTER-->
-            <generatedKey column="cid" sqlStatement="Mysql" identity="true" type="post"/>
+            <generatedKey column="aid" sqlStatement="Mysql" identity="true" type="post"/>
         </table>
         <!--         <table tableName="product_" domainObjectName="Product" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
     </context>
