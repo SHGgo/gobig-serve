@@ -20,22 +20,6 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-
-   /* @RequestMapping("/adminTest")
-    public Map<String, Object> adminTest(@RequestBody GDao dao){
-        System.out.println("===========adminTest========");
-        System.out.println(dao);
-        Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put("aid",1);
-        String token = JwtUtils.createToken(claimsMap);
-        Map<String, Object> resposeMap = new HashMap<>();
-        Map<Object, Object> dataMap = new HashMap<>();
-        dataMap.put("token",token);
-        resposeMap.put("data",dataMap);
-        resposeMap.put("code",20000);
-        return resposeMap;
-    }*/
-
     /**
      * 管理员登录
      * @param admin Admin对象 aid、adminAccount、adminPassword

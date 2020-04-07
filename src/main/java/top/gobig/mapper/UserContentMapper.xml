@@ -54,4 +54,14 @@
     like_count, view_count
     from usercontent
   </select>
+
+  <select id="selectByNickName" resultMap="BaseResultMap">
+    select *
+    from usercontent u
+    where u.nick_name like CONCAT('%',#{nickName},'%')
+    <if test="pageItemNum!=0">
+      limit #{pageStart},#{pageItemNum}
+    </if>
+  </select>
+
 </mapper>

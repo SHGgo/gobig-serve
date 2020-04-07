@@ -1,7 +1,9 @@
 package top.gobig.mapper;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import top.gobig.pojo.UserContent;
+
+import java.util.List;
 
 public interface UserContentMapper {
     int deleteByPrimaryKey(Integer uid);
@@ -13,4 +15,8 @@ public interface UserContentMapper {
     List<UserContent> selectAll();
 
     int updateByPrimaryKey(UserContent record);
+
+    List<UserContent> selectByNickName(@Param("nickName") String nickName,
+                                 @Param("pageStart") int pageStart,
+                                 @Param("pageItemNum") int pageItemNum);
 }

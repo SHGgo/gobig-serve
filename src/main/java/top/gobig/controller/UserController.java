@@ -55,6 +55,11 @@ public class UserController {
         return map;
     }
 
+    /**
+     *
+     * @param dao num
+     * @return
+     */
     @RequestMapping("/getUserContent")
     public UserContent getUserContent(@RequestBody GDao dao){
         System.out.println("========getUserContent==========");

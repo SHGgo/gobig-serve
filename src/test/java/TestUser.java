@@ -56,7 +56,7 @@ public class TestUser {
 
 
     @Test
-    public void selectUidByVid() {
+    public void selectUidByVidTest() {
         Integer uid = 1;
         Integer videoCollectNum = 9;
         List<Integer> integers = userVideoCollectMapper.selectVidByUid(uid,videoCollectNum);
@@ -77,4 +77,9 @@ public class TestUser {
         System.out.println(i);
     }
 
+    @Test
+    public void selectByNickNameTest() {
+        List<UserContent> userContents = userContentMapper.selectByNickName("root21312", 0, 0);
+        System.out.println(userContents.size());
+    }
 }

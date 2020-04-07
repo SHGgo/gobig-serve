@@ -27,4 +27,16 @@ public class searchController {
         Map<String, Object> res = searchService.searchVideo(dao);
         return res;
     }
+
+    /**
+     *
+     * @param dao |uid |nickName pageItemNum
+     * @return
+     */
+    @RequestMapping("/searchUser")
+    public Map<Object, Object> searchUser(@RequestBody GDao dao){
+        System.out.println("=============searchUser===========");
+        Map<Object, Object> res = searchService.searchUser(dao);
+        return res;
+    }
 }

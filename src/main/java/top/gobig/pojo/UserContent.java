@@ -1,7 +1,10 @@
 package top.gobig.pojo;
 
+import lombok.ToString;
+
 import java.util.Date;
 
+@ToString
 public class UserContent {
     private Integer uid;
 
