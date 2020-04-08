@@ -12,11 +12,16 @@ public interface UserContentMapper {
 
     UserContent selectByPrimaryKey(Integer uid);
 
-    List<UserContent> selectAll();
+    List<UserContent> selectAll(@Param("pageStart") int pageStart,
+                                @Param("pageItemNum") int pageItemNum);
 
     int updateByPrimaryKey(UserContent record);
 
     List<UserContent> selectByNickName(@Param("nickName") String nickName,
                                  @Param("pageStart") int pageStart,
                                  @Param("pageItemNum") int pageItemNum);
+
+    int total();
+
+    Integer total(@Param("nickName") String nickName);
 }

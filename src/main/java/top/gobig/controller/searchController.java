@@ -30,7 +30,7 @@ public class searchController {
 
     /**
      *
-     * @param dao |uid |nickName pageItemNum
+     * @param dao |uid |nickName  pageStart pageItemNum
      * @return
      */
     @RequestMapping("/searchUser")

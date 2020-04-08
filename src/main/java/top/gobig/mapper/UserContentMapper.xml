@@ -53,14 +53,25 @@
     select uid, nick_name, gender, signature, figure, birth_date, attention_count, fan_count, 
     like_count, view_count
     from usercontent
+    <if test="pageItemNum!=0 and pageItemNum!=null">
+      limit #{pageStart},#{pageItemNum}
+    </if>
   </select>
 
   <select id="selectByNickName" resultMap="BaseResultMap">
     select *
     from usercontent u
     where u.nick_name like CONCAT('%',#{nickName},'%')
-    <if test="pageItemNum!=0">
+    <if test="pageItemNum!=0 and pageItemNum!=null">
       limit #{pageStart},#{pageItemNum}
+    </if>
+  </select>
+
+  <select id="total" resultType="java.lang.Integer">
+    select count(*)
+    from usercontent u
+    <if test="nickName!=null">
+      where u.nick_name like CONCAT('%',#{nickName},'%')
     </if>
   </select>
 

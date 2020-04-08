@@ -23,9 +23,9 @@ public class GDao {
     private int sortShowBlockNum;
     private String sortName;
 
-    private int pageStart;
-    private int pageLast;
-    private int pageItemNum;
+    private int pageStart;      //每页开始的index
+    private int pageLast;       //总数
+    private int pageItemNum;    //一页元素的数量
 
     private int commentNum;
 

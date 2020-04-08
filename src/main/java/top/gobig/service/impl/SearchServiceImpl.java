@@ -9,6 +9,7 @@ import top.gobig.pojo.Video;
 import top.gobig.service.SearchService;
 import top.gobig.util.GDao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,26 +50,34 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public Map<Object, Object> searchUser(GDao dao) {
-        System.out.println(dao);
         Map<Object, Object> resMap = new HashMap<>();
         Map<Object, Object> dataMap = new HashMap<>();
         if (dao.getUid() != null) {
             UserContent userContent = userContentMapper.selectByPrimaryKey(dao.getUid());
             if (userContent != null) {
+                List<UserContent> userContents = new ArrayList<>();
+                userContents.add(userContent);
                 dataMap.put("total", 1);
-                dataMap.put("table", userContent);
+                dataMap.put("table", userContents);
             } else {
                 dataMap.put("total", 0);
             }
         } else if (dao.getNickName() != null) {
-            List<UserContent> userContents = userContentMapper.selectByNickName(
-                    dao.getNickName(), dao.getPageStart(), dao.getPageItemNum());
-            dataMap.put("total", userContents.size());
-            if (userContents.size()!=0){
+            Integer total = userContentMapper.total(dao.getNickName());
+            dataMap.put("total", total);
+            if (total!=0){
+                List<UserContent> userContents = userContentMapper
+                        .selectByNickName(dao.getNickName(), dao.getPageStart(), dao.getPageItemNum());
                 dataMap.put("table", userContents);
             }
         } else {
-            //TODO 无条件查询
+            Integer total = userContentMapper.total(dao.getNickName());
+            dataMap.put("total", total);
+            if (total!=0){
+                List<UserContent> userContents = userContentMapper
+                        .selectAll(dao.getPageStart(), dao.getPageItemNum());
+                dataMap.put("table", userContents);
+            }
         }
         resMap.put("status",20000);
         resMap.put("data",dataMap);

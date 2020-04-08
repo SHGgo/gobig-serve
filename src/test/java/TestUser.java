@@ -80,6 +80,7 @@ public class TestUser {
     @Test
     public void selectByNickNameTest() {
         List<UserContent> userContents = userContentMapper.selectByNickName("root21312", 0, 0);
-        System.out.println(userContents.size());
+        int i = userContentMapper.total("root21312");
+        System.out.println(i);
     }
 }
