@@ -5,7 +5,7 @@
 
 <mapper namespace="top.gobig.mapper.UserMapper">
 
-    <select id="selectByid" resultType="User">
+    <select id="selectById" resultType="User">
         select * from  user u where u.uid=#{uid}
     </select>
     
@@ -32,6 +32,19 @@
         select * from  user u
         where u.userAccount=#{userAccount} and u.pwd=#{pwd}
     </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from user
+        where uid = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateByPrimaryKey" parameterType="top.gobig.pojo.User">
+        update User
+        set uid = #{uid,jdbcType=INTEGER},
+            userAccount = #{userAccount,jdbcType=VARCHAR},
+            pwd = #{pwd,jdbcType=VARCHAR}
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
 
 </mapper>
 

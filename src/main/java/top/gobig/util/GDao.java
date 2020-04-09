@@ -4,11 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+import top.gobig.pojo.User;
+import top.gobig.pojo.UserContent;
 
 @Getter
 @Setter
 @ToString
 public class GDao {
+
+    private User user;
+    private UserContent userContent;
 
     private int num;
     private int index;

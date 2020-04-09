@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
-    User selectByid(int id);
+    User selectById(int id);
 
     String userRegister(User user);
 
@@ -21,4 +21,6 @@ public interface UserService {
     UserContent getUserContent(GDao num, HttpServletRequest request);
 
     List<Video> getUserVideoCollect(GDao num);
+
+    Map<Object, Object> insertUserContent(GDao dao);
 }

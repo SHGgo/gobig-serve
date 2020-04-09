@@ -9,6 +9,7 @@ import top.gobig.mapper.UserVideoCollectMapper;
 import top.gobig.pojo.User;
 import top.gobig.pojo.UserContent;
 import top.gobig.service.UserService;
+import top.gobig.util.GDao;
 import top.gobig.util.JwtUtils;
 
 import java.util.HashMap;
@@ -82,5 +83,18 @@ public class TestUser {
         List<UserContent> userContents = userContentMapper.selectByNickName("root21312", 0, 0);
         int i = userContentMapper.total("root21312");
         System.out.println(i);
+    }
+
+    @Test
+    public void insertUserContentTest() {
+        GDao gDao = new GDao();
+        User user = new User();
+        user.setUserAccount("1123123");
+        user.setPwd("1123123");
+        UserContent userContent = new UserContent();
+        gDao.setUser(user);
+        gDao.setUserContent(userContent);
+        Map<Object, Object> map = userService.insertUserContent(gDao);
+        System.out.println(map);
     }
 }

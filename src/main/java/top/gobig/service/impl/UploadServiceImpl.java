@@ -93,25 +93,30 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public Map<Object, Object> uploadUserContent(UserContent data, HttpServletRequest request) {
         Map<Object, Object> map = new HashMap<>();
-
-        if (data.getUid() ==null){
-            map.put("status","403");
-            return map;
-        }
-
-        //1.改变用户数据
-        UserContent userContent = userContentMapper.selectByPrimaryKey(data.getUid());
-        userContent.setNickName(data.getNickName());
-        userContent.setGender(data.getGender());
-        userContent.setSignature(data.getSignature());
-        userContent.setBirthDate(data.getBirthDate());
-
-        //2.更新用户数据
-        Integer result = userContentMapper.updateByPrimaryKey(userContent);
-        if (result.equals(1)){
-            map.put("status","200");
+        if (data.getUid()==0){
+            // 插入用户数据
+            map.put("status",40300);
         }else {
-            map.put("status","304");
+            //1.改变用户数据
+            UserContent userContent = userContentMapper.selectByPrimaryKey(data.getUid());
+            userContent.setNickName(data.getNickName());
+            userContent.setGender(data.getGender());
+            userContent.setSignature(data.getSignature());
+            userContent.setBirthDate(data.getBirthDate());
+            if (data.getFanCount()!=0){
+                userContent.setFanCount(data.getFanCount());
+                userContent.setViewCount(data.getViewCount());
+                userContent.setAttentionCount(data.getAttentionCount());
+                userContent.setLikeCount(data.getLikeCount());
+            }
+
+            //2.更新用户数据
+            Integer result = userContentMapper.updateByPrimaryKey(userContent);
+            if (result.equals(1)){
+                map.put("status",20000);
+            }else {
+                map.put("status",30400);
+            }
         }
         return map;
     }
@@ -129,7 +134,7 @@ public class UploadServiceImpl implements UploadService {
             file.transferTo(newFile);
         } catch (IOException e) {
             e.printStackTrace();
-            map.put("status","501");
+            map.put("status",50100);
             return map;
         }
         //2.更新头像地址
@@ -137,9 +142,9 @@ public class UploadServiceImpl implements UploadService {
         userContent.setFigure("/upload/figure/" + fileName);
         Integer result = userContentMapper.updateByPrimaryKey(userContent);
         if (result.equals(1)){
-            map.put("status","200");
+            map.put("status",20000);
         }else {
-            map.put("status","304");
+            map.put("status",30400);
         }
         return map;
     }

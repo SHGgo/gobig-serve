@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
     VideoMapper videoMapper;
 
     @Override
-    public User selectByid(int id) {
-        return userMapper.selectByid(id);
+    public User selectById(int id) {
+        return userMapper.selectById(id);
     }
 
     @Override
@@ -63,11 +63,11 @@ public class UserServiceImpl implements UserService {
         User resUser = userMapper.selectByUserAccountAndPwd(user);
         if (resUser != null) {
             String token = JwtUtils.createToken(String.valueOf(resUser.getUid()));
-            map.put("status","200");
-            map.put("token",token);
+            map.put("status", "200");
+            map.put("token", token);
             return map;
         } else {
-            map.put("status","500");
+            map.put("status", "500");
             return map;
         }
     }
@@ -78,14 +78,14 @@ public class UserServiceImpl implements UserService {
         //TODO 登录验证
         String token = request.getHeader("Authorization");
         if (token == null) {
-            map.put("status","401");//没登录
+            map.put("status", "401");//没登录
         } else {
-            if (JwtUtils.verifyToken(token)==1){
+            if (JwtUtils.verifyToken(token) == 1) {
                 HttpSession session = request.getSession();
-                session.setAttribute("uid",JwtUtils.parseToken(token).get("sub"));
-                map.put("status","200");
-            }else {
-                map.put("status","400"); //token错误
+                session.setAttribute("uid", JwtUtils.parseToken(token).get("sub"));
+                map.put("status", "200");
+            } else {
+                map.put("status", "400"); //token错误
             }
         }
         return map;
@@ -101,11 +101,11 @@ public class UserServiceImpl implements UserService {
             return resUserContent;
         } else {
             String token = request.getHeader("Authorization");
-            if (token!=null&&JwtUtils.verifyToken(token)==1){
-                Integer uid= Integer.parseInt((String) JwtUtils.parseToken(token).get("sub"));
+            if (token != null && JwtUtils.verifyToken(token) == 1) {
+                Integer uid = Integer.parseInt((String) JwtUtils.parseToken(token).get("sub"));
                 UserContent resUserContent = userContentMapper.selectByPrimaryKey(uid);
                 return resUserContent;
-            }else {
+            } else {
                 return null;
             }
         }
@@ -122,4 +122,40 @@ public class UserServiceImpl implements UserService {
         return videoList;
     }
 
+    /**
+     * 添加用户
+     *
+     * @param dao user userContent
+     * @return
+     */
+    @Override
+    public Map<Object, Object> insertUserContent(GDao dao) {
+        HashMap<Object, Object> resMap = new HashMap<>();
+        HashMap<Object, Object> dataMap = new HashMap<>();
+        // 1.添加用户账号密码
+        User user = dao.getUser();
+        if (user != null && user.getUserAccount() != null) {
+            // 1.1 账号是否相同
+            User userRes = userMapper.selectByUserAccount(user);
+            if (userRes!=null){
+                resMap.put("status",40301); //账号相同
+                return resMap;
+            }
+            int i1 = userMapper.insert(user);
+            if (i1 == 1) {
+                // 2.添加用户信息
+                System.out.println(user.toString());
+                dataMap.put("user", user);
+                UserContent userContent = dao.getUserContent();
+                userContent.setUid(user.getUid());
+                int i2 = userContentMapper.insert(userContent);
+                if (i2 == 1) {
+                    dataMap.put("userContent", userContent);
+                    resMap.put("status", 20000);
+                    resMap.put("data", dataMap);
+                }
+            }
+        }
+        return resMap;
+    }
 }

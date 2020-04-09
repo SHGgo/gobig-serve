@@ -104,4 +104,19 @@ public class UserController {
         Map<Object, Object> map = uploadService.uploadUserContent(userContent, request);
         return map;
     }
+
+    /**
+     * 添加用户 用@RequestParam注解来指定表单上的file为MultipartFile
+     *
+     * @param dao userContent user
+     * @return
+     */
+    @RequestMapping("/insertUserContent")
+    public Map<Object,Object> insertUserContent(@RequestBody GDao dao){
+        System.out.println("========insertUserContent==========");
+        Map<Object, Object> map = userService.insertUserContent(dao);
+        return map;
+    }
+
+
 }
