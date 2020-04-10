@@ -124,7 +124,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 添加用户
-     *
      * @param dao user userContent
      * @return
      */
@@ -156,6 +155,38 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
+        return resMap;
+    }
+
+    /**
+     * 删除用户
+     * @param dao uid
+     * @return
+     */
+    @Override
+    public Map<Object,Object> deleteUserContent(GDao dao){
+        HashMap<Object, Object> resMap = new HashMap<>();
+        UserContent userContent = userContentMapper.selectByPrimaryKey(dao.getUid());
+        if (userContent == null){
+            //TODO
+            resMap.put("status",40001); // 参数错误
+            return resMap;
+        }
+        //1.删除userContent
+        try {
+            userContentMapper.deleteByPrimaryKey(dao.getUid());
+        } catch (Exception e) {
+            resMap.put("status",40301); // 有依赖，不能删除
+            return resMap;
+        }
+        //2.删除user
+        try {
+            userMapper.deleteByPrimaryKey(dao.getUid());
+        } catch (Exception e) {
+            resMap.put("status",40301); // 有依赖，不能删除
+            return resMap;
+        }
+        resMap.put("status",20000);
         return resMap;
     }
 }

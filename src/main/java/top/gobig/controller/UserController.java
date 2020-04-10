@@ -93,7 +93,7 @@ public class UserController {
     }
 
     /**
-     * 上传文件 用@RequestParam注解来指定表单上的file为MultipartFile
+     * 更新用户信息
      *
      * @param userContent userContent uid nickName gender signature birthDate
      * @return
@@ -106,7 +106,7 @@ public class UserController {
     }
 
     /**
-     * 添加用户 用@RequestParam注解来指定表单上的file为MultipartFile
+     * 添加用户
      *
      * @param dao userContent user
      * @return
@@ -115,6 +115,19 @@ public class UserController {
     public Map<Object,Object> insertUserContent(@RequestBody GDao dao){
         System.out.println("========insertUserContent==========");
         Map<Object, Object> map = userService.insertUserContent(dao);
+        return map;
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param dao uid
+     * @return
+     */
+    @RequestMapping("/deleteUserContent")
+    public Map<Object,Object> deleteUserContent(@RequestBody GDao dao){
+        System.out.println("========deleteUserContent==========");
+        Map<Object, Object> map = userService.deleteUserContent(dao);
         return map;
     }
 

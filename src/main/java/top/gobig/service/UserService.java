@@ -23,4 +23,6 @@ public interface UserService {
     List<Video> getUserVideoCollect(GDao num);
 
     Map<Object, Object> insertUserContent(GDao dao);
+
+    Map<Object,Object> deleteUserContent(GDao dao);
 }

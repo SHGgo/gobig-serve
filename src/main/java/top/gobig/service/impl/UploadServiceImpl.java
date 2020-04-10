@@ -28,31 +28,31 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public Map<Object, Object> uploadVideoContent(Video video, HttpServletRequest request) {
         Map<Object, Object> map = new HashMap<>();
-        if (video.getUid() == null){
-            map.put("status","403");
+        if (video.getUid() == null) {
+            map.put("status", "403");
             return map;
         }
         //1.插入视频数据
         Integer res = videoMapper.insert(video);
-        if (res.equals(1)){
-            map.put("vid",video.getVid());
-            map.put("status","200");
-        }else {
-            map.put("status","304");
+        if (res.equals(1)) {
+            map.put("vid", video.getVid());
+            map.put("status", "200");
+        } else {
+            map.put("status", "304");
         }
         return map;
     }
 
     @Override
     public Map<Object, Object> uploadVideoFile(MultipartFile videoFile, MultipartFile picFile,
-                                               int vid,HttpServletRequest request) {
+                                               int vid, HttpServletRequest request) {
         Map<Object, Object> map = new HashMap<>();
         try {
             //1.上传视频和头图
             //创建文件名字
             long time = new Date().getTime();
-            String videoFileName = time + "_" +videoFile.getOriginalFilename();
-            String picFileName = time + "_" +picFile.getOriginalFilename();
+            String videoFileName = time + "_" + videoFile.getOriginalFilename();
+            String picFileName = time + "_" + picFile.getOriginalFilename();
             //创建文件路径
             String videoFilePath = request.getServletContext().getRealPath("") + "/upload/video/" + videoFileName;//获取绝对路径
             String picFilePath = request.getServletContext().getRealPath("") + "/upload/videoPic/" + picFileName;//获取绝对路径
@@ -66,24 +66,24 @@ public class UploadServiceImpl implements UploadService {
                 picFile.transferTo(newPicFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                map.put("status","501");
+                map.put("status", "501");
                 return map;
             }
             //2.更新视频和头图地址
             Video video = videoMapper.selectByVid(vid);
-            video.setVideoRes("/upload/video/"+videoFileName);
-            video.setPic("/upload/videoPic/"+picFileName);
+            video.setVideoRes("/upload/video/" + videoFileName);
+            video.setPic("/upload/videoPic/" + picFileName);
             Integer res = videoMapper.updateByPrimaryKey(video);
-            if (res.equals(1)){
-                map.put("status","200");
-            }else {
-                map.put("status","304");
+            if (res.equals(1)) {
+                map.put("status", "200");
+            } else {
+                map.put("status", "304");
             }
         } catch (Exception e) {
             System.out.println("vid = " + vid);
             int i = videoMapper.deleteByPrimaryKey(vid);
             System.out.println(i);
-            map.put("status","501");
+            map.put("status", "501");
             e.printStackTrace();
             return map;
         }
@@ -91,31 +91,18 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    public Map<Object, Object> uploadUserContent(UserContent data, HttpServletRequest request) {
+    public Map<Object, Object> uploadUserContent(UserContent userContent, HttpServletRequest request) {
         Map<Object, Object> map = new HashMap<>();
-        if (data.getUid()==0){
-            // 插入用户数据
-            map.put("status",40300);
-        }else {
-            //1.改变用户数据
-            UserContent userContent = userContentMapper.selectByPrimaryKey(data.getUid());
-            userContent.setNickName(data.getNickName());
-            userContent.setGender(data.getGender());
-            userContent.setSignature(data.getSignature());
-            userContent.setBirthDate(data.getBirthDate());
-            if (data.getFanCount()!=0){
-                userContent.setFanCount(data.getFanCount());
-                userContent.setViewCount(data.getViewCount());
-                userContent.setAttentionCount(data.getAttentionCount());
-                userContent.setLikeCount(data.getLikeCount());
-            }
-
-            //2.更新用户数据
+        System.out.println(userContent);
+        if (userContent.getUid() == 0) {
+            map.put("status", 40300);
+        } else {
+            // 更新用户数据
             Integer result = userContentMapper.updateByPrimaryKey(userContent);
-            if (result.equals(1)){
-                map.put("status",20000);
-            }else {
-                map.put("status",30400);
+            if (result.equals(1)) {
+                map.put("status", 20000);
+            } else {
+                map.put("status", 30400);
             }
         }
         return map;
@@ -126,7 +113,7 @@ public class UploadServiceImpl implements UploadService {
         Map<Object, Object> map = new HashMap<>();
         //1.上传图片
         MultipartFile file = dao.getFile();
-        String fileName = new Date().getTime() + "_" +file.getOriginalFilename();
+        String fileName = new Date().getTime() + "_" + dao.getUid() + "_" + file.getOriginalFilename().substring(file.getOriginalFilename().length() - 10);
         String filePath = request.getServletContext().getRealPath("") + "/upload/figure/" + fileName;//获取绝对路径
         File newFile = new File(filePath);
         newFile.mkdirs();
@@ -134,17 +121,17 @@ public class UploadServiceImpl implements UploadService {
             file.transferTo(newFile);
         } catch (IOException e) {
             e.printStackTrace();
-            map.put("status",50100);
+            map.put("status", 50100);//本地储存错误
             return map;
         }
         //2.更新头像地址
         UserContent userContent = userContentMapper.selectByPrimaryKey(dao.getUid());
         userContent.setFigure("/upload/figure/" + fileName);
         Integer result = userContentMapper.updateByPrimaryKey(userContent);
-        if (result.equals(1)){
-            map.put("status",20000);
-        }else {
-            map.put("status",30400);
+        if (result.equals(1)) {
+            map.put("status", 20000);
+        } else {
+            map.put("status", 30400);//数据库错误 或 登陆错误
         }
         return map;
     }
