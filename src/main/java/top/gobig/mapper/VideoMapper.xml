@@ -52,62 +52,64 @@
             v_score       = #{vScore,jdbcType=INTEGER}
         where vid = #{vid,jdbcType=INTEGER}
     </update>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from video
+        <if test="pageItemNum!=0 and pageItemNum!=null">
+            limit #{pageStart},#{pageItemNum}
+        </if>
+    </select>
+
     <select id="selectByVid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select vid,
-               title,
-               uid,
-               author,
-               introduction,
-               sort_name,
-               release_date,
-               view_count,
-               comment_count,
-               collect_count,
-               pic,
-               video_res,
-               v_score
+        select *
         from video
         where vid = #{vid,jdbcType=INTEGER}
     </select>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select vid,
-               title,
-               uid,
-               author,
-               introduction,
-               sort_name,
-               release_date,
-               view_count,
-               comment_count,
-               collect_count,
-               pic,
-               video_res,
-               v_score
-        from video
-    </select>
 
     <select id="selectByUid" resultMap="BaseResultMap">
-        select vid,
-               title,
-               uid,
-               author,
-               introduction,
-               sort_name,
-               release_date,
-               view_count,
-               comment_count,
-               collect_count,
-               pic,
-               video_res,
-               v_score
+        select *
         from video v
         where v.uid = #{uid}
-        limit #{videoNum}
+        <if test="pageItemNum!=0 and pageItemNum!=null">
+            limit #{pageStart},#{pageItemNum}
+        </if>
+    </select>
+
+    <select id="selectByTitle" resultMap="BaseResultMap">
+        select *
+        from video v
+        where v.title = like CONCAT('%',#{title},'%')
+        <if test="pageItemNum!=0 and pageItemNum!=null">
+            limit #{pageStart},#{pageItemNum}
+        </if>
+    </select>
+
+    <select id="selectByAuthor" resultMap="BaseResultMap">
+        select *
+        from video v
+        where v.author = like CONCAT('%',#{author},'%')
+        <if test="pageItemNum!=0 and pageItemNum!=null">
+            limit #{pageStart},#{pageItemNum}
+        </if>
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        select count(*)
+        from video v
+        <if test="author!=null">
+            where v.author like CONCAT('%',#{author},'%')
+        </if>
+        <if test="title!=null">
+            where v.title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="uid!=0">
+            where v.uid = #{uid}
+        </if>
     </select>
 
     <select id="selectBySortName" resultMap="BaseResultMap" parameterType="top.gobig.util.GDao">
-        select vid, title, uid, author, introduction, sort_name, release_date, view_count,
-        comment_count, collect_count, pic, video_res, v_score
+        select *
         from video v
         where v.sort_name = #{dao.sortName}
         <choose>
@@ -121,19 +123,7 @@
     </select>
 
     <select id="selectByScore" resultMap="BaseResultMap" parameterType="top.gobig.util.GDao">
-        select vid,
-               title,
-               uid,
-               author,
-               introduction,
-               sort_name,
-               release_date,
-               view_count,
-               comment_count,
-               collect_count,
-               pic,
-               video_res,
-               v_score
+        select *
         from video v
         order by v.v_score desc
         limit #{dao.pageStart},#{dao.videoNum}

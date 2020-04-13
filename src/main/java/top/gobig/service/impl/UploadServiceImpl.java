@@ -27,20 +27,30 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public Map<Object, Object> uploadVideoContent(Video video, HttpServletRequest request) {
-        Map<Object, Object> map = new HashMap<>();
+        Map<Object, Object> resMap = new HashMap<>();
+        Map<Object, Object> dataMap = new HashMap<>();
         if (video.getUid() == null) {
-            map.put("status", "403");
-            return map;
+            resMap.put("status", "403");
+            return resMap;
         }
-        //1.插入视频数据
-        Integer res = videoMapper.insert(video);
-        if (res.equals(1)) {
-            map.put("vid", video.getVid());
-            map.put("status", "200");
-        } else {
-            map.put("status", "304");
+        if (video.getVid()==null){
+            // 1.插入视频数据
+            if (video.getAuthor()==null){
+                // 1.1设置author
+                video.setAuthor(userContentMapper.selectByPrimaryKey(video.getUid()).getNickName());
+            }
+            Integer res = videoMapper.insert(video);
+            if (res.equals(1)) {
+                dataMap.put("vid", video.getVid());
+                resMap.put("data", dataMap);
+                resMap.put("status", 20000);
+            } else {
+                dataMap.put("status", 50000);//未知原因
+            }
+        }else {
+            // 2.更新数据
         }
-        return map;
+        return resMap;
     }
 
     @Override
@@ -66,7 +76,7 @@ public class UploadServiceImpl implements UploadService {
                 picFile.transferTo(newPicFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                map.put("status", "501");
+                map.put("status", 50000);
                 return map;
             }
             //2.更新视频和头图地址
@@ -75,15 +85,15 @@ public class UploadServiceImpl implements UploadService {
             video.setPic("/upload/videoPic/" + picFileName);
             Integer res = videoMapper.updateByPrimaryKey(video);
             if (res.equals(1)) {
-                map.put("status", "200");
+                map.put("status", 20000);
             } else {
-                map.put("status", "304");
+                map.put("status", 50000);
             }
         } catch (Exception e) {
             System.out.println("vid = " + vid);
             int i = videoMapper.deleteByPrimaryKey(vid);
             System.out.println(i);
-            map.put("status", "501");
+            map.put("status", 50000);
             e.printStackTrace();
             return map;
         }

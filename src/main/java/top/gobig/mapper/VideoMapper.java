@@ -13,12 +13,17 @@ public interface VideoMapper {
 
     int updateByPrimaryKey(Video record);
 
-
     List<Video> selectAll();
+
+    List<Video> selectAll(GDao dao);
 
     Video selectByVid(Integer vid);
 
-    List<Video> selectByUid(@Param("uid") Integer uid, @Param("videoNum")Integer videoNum);
+    List<Video> selectByUid(GDao dao);
+
+    List<Video> selectByTitle(GDao dao);
+
+    List<Video> selectByAuthor(GDao dao);
 
     List<Video> selectBySortName(@Param("dao") GDao dao);
 
@@ -33,4 +38,6 @@ public interface VideoMapper {
     List<Video> selectByKeyWord(@Param("dao") GDao dao);
 
     Integer selectByKeyWordCount(@Param("dao") GDao dao);
+
+    Integer total(@Param("author") String author,@Param("title") String title,@Param("uid") int uid);
 }

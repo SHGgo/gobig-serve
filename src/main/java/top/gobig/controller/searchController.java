@@ -30,6 +30,19 @@ public class searchController {
 
     /**
      *
+     * @param dao {|vid |title |uid |nickName pageItemNum}
+     * @return
+     */
+    @RequestMapping("/searchVideoByAdmin")
+    public Map<Object, Object> searchVideoByAdmin(@RequestBody GDao dao){
+        System.out.println("=============searchVideoByAdmin===========");
+        System.out.println(dao);
+        Map<Object, Object> res = searchService.searchVideoByAdmin(dao);
+        return res;
+    }
+
+    /**
+     *
      * @param dao |uid |nickName  pageStart pageItemNum
      * @return
      */

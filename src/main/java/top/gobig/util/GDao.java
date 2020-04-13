@@ -16,13 +16,15 @@ public class GDao {
     private UserContent userContent;
 
     private int num;
-    private int index;
+    private int index; //数据库的表中元素序号，区分id
 
     private Integer uid;
     private String nickName;
 
     private int videoNum;
-    private int vid;
+    private Integer vid;
+    private String author;
+    private String title;
 
     private int sortNum;
     private int sortShowBlockNum;

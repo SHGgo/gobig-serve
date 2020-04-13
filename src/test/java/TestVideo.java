@@ -20,13 +20,6 @@ public class TestVideo {
     VideoMapper videoMapper;
     @Autowired
     VideoService videoService;
-    @Test
-    public void selectByUid() {
-        List<Video> videos = videoMapper.selectByUid(1,2);
-        for (Video video : videos) {
-            System.out.println(video.toString());
-        }
-    }
 
     @Test
     public void selectAll() {

@@ -22,7 +22,8 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> getUserVideoList(GDao dao) {
-        List<Video> videos = videoMapper.selectByUid(dao.getUid(),dao.getVideoNum());
+        dao.setPageItemNum(dao.getVideoNum());
+        List<Video> videos = videoMapper.selectByUid(dao);
         return videos;
     }
 

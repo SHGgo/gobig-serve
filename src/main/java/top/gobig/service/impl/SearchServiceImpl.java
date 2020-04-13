@@ -44,6 +44,63 @@ public class SearchServiceImpl implements SearchService {
     }
 
     /**
+     * admin搜索video
+     * @param dao |vid |title |uid |nickName pageItemNum
+     * @return
+     */
+    @Override
+    public Map<Object, Object> searchVideoByAdmin(GDao dao) {
+        Map<Object, Object> resMap = new HashMap<>();
+        Map<Object, Object> dataMap = new HashMap<>();
+        if (dao.getVid() != null) {
+            Video video = videoMapper.selectByVid(dao.getVid());
+            if (video != null) {
+                List<Video> videoList = new ArrayList<>();
+                videoList.add(video);
+                dataMap.put("total", 1);
+                dataMap.put("table", videoList);
+            } else {
+                dataMap.put("total", 0);
+            }
+        } else if (dao.getAuthor() != null) {
+            Integer total = videoMapper.total(dao.getAuthor(),null,0);
+            dataMap.put("total", total);
+            if (total!=0){
+                List<Video> videoList = videoMapper
+                        .selectByAuthor(dao);
+                dataMap.put("table", videoList);
+            }
+        }else if (dao.getUid() != null) {
+            Integer total = videoMapper.total(null,null,dao.getUid());
+            dataMap.put("total", total);
+            if (total!=0){
+                System.out.println(dao.getUid());
+                List<Video> videoList = videoMapper
+                        .selectByUid(dao);
+                dataMap.put("table", videoList);
+            }
+        }else if (dao.getTitle() != null) {
+            Integer total = videoMapper.total(null,dao.getTitle(),0);
+            dataMap.put("total", total);
+            if (total!=0){
+                List<Video> videoList = videoMapper
+                        .selectByTitle(dao);
+                dataMap.put("table", videoList);
+            }
+        } else {
+            Integer total = videoMapper.total(null,null,0);
+            dataMap.put("total", total);
+            if (total!=0){
+                List<Video> videoList = videoMapper.selectAll(dao);
+                dataMap.put("table", videoList);
+            }
+        }
+        resMap.put("status",20000);
+        resMap.put("data",dataMap);
+        return resMap;
+    }
+
+    /**
      *
      * @param dao |uid |nickName pageItemNum
      * @return
