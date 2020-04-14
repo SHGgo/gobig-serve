@@ -62,7 +62,7 @@ public class VideoController {
     }
 
     @RequestMapping("/uploadVideoFile")
-    public Map<Object, Object> uploadVideoFile(@RequestParam("videoFile") MultipartFile videoFile,
+    public Map<Object, Object> uploadVideoFile(@RequestParam(value = "videoFile",required = false) MultipartFile videoFile ,
                                                @RequestParam("picFile") MultipartFile picFile,
                                                @RequestParam("vid") int vid){
         System.out.println("=============uploadVideoFile===========");
@@ -74,6 +74,13 @@ public class VideoController {
     public Map<Object, Object> uploadVideoContent(@RequestBody Video video){
         System.out.println("=============uploadVideoContent===========");
         Map<Object, Object> map = uploadService.uploadVideoContent(video, request);
+        return map;
+    }
+
+    @RequestMapping("/deleteVideoContent")
+    public Map<Object, Object> deleteVideoContent(@RequestBody GDao dao){
+        System.out.println("=============deleteVideoContent===========");
+        Map<Object, Object> map = videoService.deleteVideoContent(dao, request);
         return map;
     }
 }

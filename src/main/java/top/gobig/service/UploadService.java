@@ -29,4 +29,5 @@ public interface UploadService {
      * @return
      */
     Map<Object, Object> uploadUserContent(UserContent userContent, HttpServletRequest request);
+
 }

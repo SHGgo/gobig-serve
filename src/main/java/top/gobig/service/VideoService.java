@@ -3,6 +3,7 @@ package top.gobig.service;
 import top.gobig.pojo.Video;
 import top.gobig.util.GDao;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,6 @@ public interface VideoService {
     Map<Object,Object> getRandomVideo(GDao data);
 
     Map<Object,Object> getRandomSortVideo(GDao data);
+
+    Map<Object, Object> deleteVideoContent(GDao dao, HttpServletRequest request);
 }

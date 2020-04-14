@@ -29,6 +29,7 @@ public class UploadServiceImpl implements UploadService {
     public Map<Object, Object> uploadVideoContent(Video video, HttpServletRequest request) {
         Map<Object, Object> resMap = new HashMap<>();
         Map<Object, Object> dataMap = new HashMap<>();
+        Integer flag;
         if (video.getUid() == null) {
             resMap.put("status", "403");
             return resMap;
@@ -39,16 +40,18 @@ public class UploadServiceImpl implements UploadService {
                 // 1.1设置author
                 video.setAuthor(userContentMapper.selectByPrimaryKey(video.getUid()).getNickName());
             }
-            Integer res = videoMapper.insert(video);
-            if (res.equals(1)) {
-                dataMap.put("vid", video.getVid());
-                resMap.put("data", dataMap);
-                resMap.put("status", 20000);
-            } else {
-                dataMap.put("status", 50000);//未知原因
-            }
+            flag = videoMapper.insert(video);
         }else {
             // 2.更新数据
+            flag = videoMapper.updateByPrimaryKey(video);
+
+        }
+        if (flag.equals(1)) {
+            dataMap.put("vid", video.getVid());
+            resMap.put("data", dataMap);
+            resMap.put("status", 20000);
+        } else {
+            dataMap.put("status", 50000);//未知原因
         }
         return resMap;
     }
@@ -59,30 +62,31 @@ public class UploadServiceImpl implements UploadService {
         Map<Object, Object> map = new HashMap<>();
         try {
             //1.上传视频和头图
-            //创建文件名字
             long time = new Date().getTime();
-            String videoFileName = time + "_" + videoFile.getOriginalFilename();
-            String picFileName = time + "_" + picFile.getOriginalFilename();
-            //创建文件路径
-            String videoFilePath = request.getServletContext().getRealPath("") + "/upload/video/" + videoFileName;//获取绝对路径
-            String picFilePath = request.getServletContext().getRealPath("") + "/upload/videoPic/" + picFileName;//获取绝对路径
-            //创建文件
-            File newVideoFile = new File(videoFilePath);
-            newVideoFile.mkdirs();
-            File newPicFile = new File(picFilePath);
-            newPicFile.mkdirs();
-            try {
-                videoFile.transferTo(newVideoFile);
-                picFile.transferTo(newPicFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                map.put("status", 50000);
-                return map;
-            }
-            //2.更新视频和头图地址
             Video video = videoMapper.selectByVid(vid);
-            video.setVideoRes("/upload/video/" + videoFileName);
-            video.setPic("/upload/videoPic/" + picFileName);
+            if (videoFile!=null){
+                //创建文件名字
+                String videoFileName = time + "_" + videoFile.getOriginalFilename();
+                //创建文件路径
+                String videoFilePath = request.getServletContext().getRealPath("") + "/upload/video/" + videoFileName;//获取绝对路径
+                //创建文件
+                File newVideoFile = new File(videoFilePath);
+                newVideoFile.mkdirs();
+                videoFile.transferTo(newVideoFile);
+                // 更新视频地址
+                video.setVideoRes("/upload/video/" + videoFileName);
+            }
+            if(picFile!=null){
+                //创建文件名字
+                String picFileName = time + "_" + picFile.getOriginalFilename();
+                //创建文件路径
+                String picFilePath = request.getServletContext().getRealPath("") + "/upload/videoPic/" + picFileName;//获取绝对路径
+                File newPicFile = new File(picFilePath);
+                newPicFile.mkdirs();
+                picFile.transferTo(newPicFile);
+                //更新头图地址
+                video.setPic("/upload/videoPic/" + picFileName);
+            }
             Integer res = videoMapper.updateByPrimaryKey(video);
             if (res.equals(1)) {
                 map.put("status", 20000);

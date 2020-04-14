@@ -10,6 +10,7 @@ import top.gobig.pojo.Video;
 import top.gobig.service.VideoService;
 import top.gobig.util.GDao;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -130,6 +131,19 @@ public class VideoServiceImpl implements VideoService {
             map.put(sort.getSortName(), videoList);
         }
         return map;
+    }
+
+    @Override
+    public Map<Object, Object> deleteVideoContent(GDao dao, HttpServletRequest request) {
+        HashMap<Object, Object> resMap = new HashMap<>();
+        try {
+            videoMapper.deleteByPrimaryKey(dao.getVid());
+        } catch (Exception e) {
+            resMap.put("status",50000); // 未知错误
+            return resMap;
+        }
+        resMap.put("status",20000);
+        return resMap;
     }
 
 }
