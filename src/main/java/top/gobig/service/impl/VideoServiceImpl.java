@@ -52,10 +52,16 @@ public class VideoServiceImpl implements VideoService {
         }
         List<Video> videoList = videoMapper.selectByScore(dao);
         Map<Object, Object> map = new HashMap<>();
+        map.put("status",20000);
         map.put("videoList",videoList);
         return map;
     }
 
+    /**
+     * 获取一个视频的信息
+     * @param dao vid
+     * @return
+     */
     @Override
     public Map<Object, Object> getOneVideo(GDao dao) {
         int vid = dao.getVid();

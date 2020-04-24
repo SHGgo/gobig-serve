@@ -47,6 +47,11 @@ public class VideoController {
         return res;
     }
 
+    /**
+     *
+     * @param dao videoNum
+     * @return
+     */
     @RequestMapping("/getScoreVideoList")
     public Map<Object, Object> getScoreVideoList(@RequestBody GDao dao) {
         System.out.println("=============getScoreVideoList===========");
