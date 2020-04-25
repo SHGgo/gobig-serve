@@ -21,6 +21,7 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     SortMapper sortMapper;
 
+
     @Override
     public List<Video> getUserVideoList(GDao dao) {
         dao.setPageItemNum(dao.getVideoNum());
@@ -30,7 +31,7 @@ public class VideoServiceImpl implements VideoService {
 
     /**
      * getSortVideoList
-     * @param dao (需要开始的索引,视频的数目）
+     * @param dao (sortName,pageLast,videoNum）
      * @return
      */
     @Override
