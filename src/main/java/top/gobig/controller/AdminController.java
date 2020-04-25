@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     /**
-     * 获取管理员信息
+     * 管理员退出
      * @return Map<Object, Object> json对象
      */
     @RequestMapping("/adminLogout")

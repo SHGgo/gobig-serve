@@ -26,7 +26,7 @@ public class indexController {
 
 
     /**
-     *
+     * 获取随机的视频列表信息
      * @param dao videoNum
      * @return
      */
@@ -37,7 +37,11 @@ public class indexController {
         return randomVideo;
     }
 
-
+    /**
+     * 获取视频分类信息
+     * @param dao num
+     * @return
+     */
     @RequestMapping("/getSortNameList")
     public List<Sort> getSortNameList(@RequestBody GDao dao) {
         System.out.println("getSortNameList");
@@ -48,7 +52,7 @@ public class indexController {
 
 
     /**
-     *
+     * 获取 多个随机分类的视频 信息
      * @param dao videoNum  sortNum
      * @return
      */

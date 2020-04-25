@@ -32,6 +32,11 @@ public class VideoController {
         return "asdas";
     }*/
 
+    /**
+     * 获取用户视频信息
+     * @param dao uid
+     * @return
+     */
     @RequestMapping("/getUserVideoList")
     public List<Video> getUserVideoList(@RequestBody GDao dao) {
         System.out.println("=============getUserVideoList===========");
@@ -40,6 +45,11 @@ public class VideoController {
         return videoList;
     }
 
+    /**
+     * 获取分类视频信息
+     * @param dao sortName,pageLast,videoNum
+     * @return
+     */
     @RequestMapping("/getSortVideoList")
     public Map<Object, Object> getSortVideoList(@RequestBody GDao dao) {
         System.out.println("=============getSortVideoList===========");
@@ -48,7 +58,7 @@ public class VideoController {
     }
 
     /**
-     *
+     * 获取排行榜视频信息
      * @param dao videoNum
      * @return
      */
@@ -59,6 +69,11 @@ public class VideoController {
         return res;
     }
 
+    /**
+     * 获取一个视频信息
+     * @param dao vid
+     * @return
+     */
     @RequestMapping("/getOneVideo")
     public Map<Object, Object> getOneVideo(@RequestBody GDao dao){
         System.out.println("=============getOneVideo===========");
@@ -66,6 +81,14 @@ public class VideoController {
         return res;
     }
 
+
+    /**
+     * 上传视频文件
+     * @param videoFile
+     * @param picFile
+     * @param vid
+     * @return
+     */
     @RequestMapping("/uploadVideoFile")
     public Map<Object, Object> uploadVideoFile(@RequestParam(value = "videoFile",required = false) MultipartFile videoFile ,
                                                @RequestParam("picFile") MultipartFile picFile,
@@ -75,6 +98,11 @@ public class VideoController {
         return map;
     }
 
+    /**
+     * 更新或增加视频信息
+     * @param video
+     * @return
+     */
     @RequestMapping("/uploadVideoContent")
     public Map<Object, Object> uploadVideoContent(@RequestBody Video video){
         System.out.println("=============uploadVideoContent===========");
@@ -82,6 +110,11 @@ public class VideoController {
         return map;
     }
 
+    /**
+     * 删除视频信息
+     * @param vid
+     * @return
+     */
     @RequestMapping("/deleteVideoContent")
     public Map<Object, Object> deleteVideoContent(@RequestBody GDao dao){
         System.out.println("=============deleteVideoContent===========");

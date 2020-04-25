@@ -17,7 +17,7 @@ public class searchController {
     SearchService searchService;
 
     /**
-     *
+     * 通过关键字查询视频信息
      * @param dao {searchKeyWord , videoNum , pageStart , pageLast}
      * @return
      */
@@ -29,7 +29,7 @@ public class searchController {
     }
 
     /**
-     *
+     * 管理员关键字搜索视频
      * @param dao {|vid |title |uid |nickName pageItemNum}
      * @return
      */
@@ -42,7 +42,7 @@ public class searchController {
     }
 
     /**
-     *
+     * 关键字查询用户信息
      * @param dao |uid |nickName  pageStart pageItemNum
      * @return
      */

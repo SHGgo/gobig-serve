@@ -34,6 +34,12 @@ public class UserController {
     @Autowired
     private HttpServletResponse response;
 
+
+    /**
+     * 用户注册
+     * @param user
+     * @return
+     */
     @RequestMapping("/userRegister")
     public String userRegister(@RequestBody User user){
         System.out.println("userRegister:"+user.toString());
@@ -41,6 +47,12 @@ public class UserController {
         return res;
     }
 
+
+    /**
+     * 用户登录
+     * @param user
+     * @return
+     */
     @RequestMapping("/userLogin")
     public Map<Object, Object> userLogin(@RequestBody User user) throws Exception {
         System.out.println("userLoginController:"+user.toString());
@@ -48,6 +60,10 @@ public class UserController {
         return map;
     }
 
+    /**
+     * 确认登录状态
+     * @return
+     */
     @RequestMapping("/userConditionCheck")
     public Map<Object, Object> userConditionCheck() {
         System.out.println("========userConditionCheck===========");
@@ -56,7 +72,7 @@ public class UserController {
     }
 
     /**
-     *
+     * 获取用户信息
      * @param dao num
      * @return
      */
@@ -68,6 +84,11 @@ public class UserController {
         return resUserContent;
     }
 
+    /**
+     * 获取用户视频收藏信息
+     * @param dao num
+     * @return
+     */
     @RequestMapping("/getUserVideoCollect")
     public List<Video> getUserVideoCollect(@RequestBody GDao dao){
         System.out.println("========getUserVideoCollect==========");
@@ -76,8 +97,7 @@ public class UserController {
     }
 
     /**
-     * 上传文件 用@RequestParam注解来指定表单上的file为MultipartFile
-     *
+     * 上传用户头像 用@RequestParam注解来指定表单上的file为MultipartFile
      * @param file 头像信息
      * @param uid 用户id
      * @return
@@ -94,7 +114,6 @@ public class UserController {
 
     /**
      * 更新用户信息
-     *
      * @param userContent userContent uid nickName gender signature birthDate
      * @return
      */
@@ -107,7 +126,6 @@ public class UserController {
 
     /**
      * 添加用户
-     *
      * @param dao userContent user
      * @return
      */
@@ -120,7 +138,6 @@ public class UserController {
 
     /**
      * 删除用户
-     *
      * @param dao uid
      * @return
      */
