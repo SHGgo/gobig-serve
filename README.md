@@ -1,3 +1,18 @@
+<!-- TOC -->
+
+- [gobig-serve](#gobig-serve)
+- [关于](#%E5%85%B3%E4%BA%8E)
+- [技术栈](#%E6%8A%80%E6%9C%AF%E6%A0%88)
+    - [数据库](#%E6%95%B0%E6%8D%AE%E5%BA%93)
+    - [后端](#%E5%90%8E%E7%AB%AF)
+    - [服务器](#%E6%9C%8D%E5%8A%A1%E5%99%A8)
+- [结构、功能与实现](#%E7%BB%93%E6%9E%84%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%AE%9E%E7%8E%B0)
+    - [目录结构](#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84)
+    - [功能](#%E5%8A%9F%E8%83%BD)
+- [文档完善中······](#%E6%96%87%E6%A1%A3%E5%AE%8C%E5%96%84%E4%B8%AD%C2%B7%C2%B7%C2%B7%C2%B7%C2%B7%C2%B7)
+
+<!-- /TOC -->
+
 # gobig-serve
  spring + springMVC + mybatis + maven + tomcat
  包括管理信息系统、用户评论、视频展示、相关搜索、用户登录、视频播放等功能的视频点播分享网站的后端实现
@@ -15,6 +30,7 @@
 - gobig-serve是gobig项目的后端。因为gobig整体采用前后端分离的MVVM模式，所以gobig-serve的任务是向各个前端平台提供接口、处理数据、返回数据，不参与页面逻辑的控制。
 
 # 技术栈
+
 ## 数据库
 - Mysql
 版本：8.0.13
@@ -57,8 +73,10 @@ java编程语言开发的集成环境
 - 宝塔linux
 
 # 结构、功能与实现
+
 ## 目录结构
 ![目录结构](https://img-blog.csdnimg.cn/202004251728581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzg1OTIy,size_16,color_FFFFFF,t_70)
+
 ## 功能
 这里的controller，很好地体现了gobig-serve的六个功能分区：**后台信息系统、评论、首页、搜索、用户、视频**。
 1. 后台信息系统
