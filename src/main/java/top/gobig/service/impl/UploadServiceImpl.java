@@ -126,27 +126,31 @@ public class UploadServiceImpl implements UploadService {
     public Map<Object, Object> uploadUserFigure(GDao dao, HttpServletRequest request) {
         Map<Object, Object> map = new HashMap<>();
         //1.上传图片
-        MultipartFile file = dao.getFile();
-        String fileName = new Date().getTime() + "_" + dao.getUid() + "_" + file.getOriginalFilename().substring(file.getOriginalFilename().length() - 10);
-        String filePath = request.getServletContext().getRealPath("") + "/upload/figure/" + fileName;//获取绝对路径
-        File newFile = new File(filePath);
-        newFile.mkdirs();
         try {
+            MultipartFile file = dao.getFile();
+            //获取图片后缀类型
+            String[] splitStr = file.getOriginalFilename().split("\\.");
+            String imgType = "." + splitStr[splitStr.length - 1];
+            String fileName = new Date().getTime() + "_" + dao.getUid() + imgType;
+            String filePath = request.getServletContext().getRealPath("") + "/upload/figure/" + fileName;//获取绝对路径
+            File newFile = new File(filePath);
+            newFile.mkdirs();
             file.transferTo(newFile);
+            //2.更新头像地址
+            UserContent userContent = userContentMapper.selectByPrimaryKey(dao.getUid());
+            userContent.setFigure("/upload/figure/" + fileName);
+            Integer result = userContentMapper.updateByPrimaryKey(userContent);
+            if (result.equals(1)) {
+                map.put("status", 20000);
+            } else {
+                map.put("status", 30400);//数据库错误 或 登陆错误
+            }
+            return map;
         } catch (IOException e) {
             e.printStackTrace();
             map.put("status", 50100);//本地储存错误
             return map;
         }
-        //2.更新头像地址
-        UserContent userContent = userContentMapper.selectByPrimaryKey(dao.getUid());
-        userContent.setFigure("/upload/figure/" + fileName);
-        Integer result = userContentMapper.updateByPrimaryKey(userContent);
-        if (result.equals(1)) {
-            map.put("status", 20000);
-        } else {
-            map.put("status", 30400);//数据库错误 或 登陆错误
-        }
-        return map;
+
     }
 }
