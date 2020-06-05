@@ -112,7 +112,7 @@ public class VideoController {
 
     /**
      * 删除视频信息
-     * @param vid
+     * @param dao
      * @return
      */
     @RequestMapping("/deleteVideoContent")
