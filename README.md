@@ -22,6 +22,7 @@
 # 关于
 1. 作者
 - 本人是一个即将从大学毕业的学生，因为毕业论文的要求，开始制作gobig项目。不仅是对自己大学学习的总结，也是学习新的知识的实践。
+- 联系方式：qq:741782425（请备注Github)
 
 2. gobig
 - gobig是一个以视频点播、分享为主的网站。整体分为主站（[gobig-front-end](https://github.com/SHGgo/gobig-front-end)）、小程序（[gobig-mini](https://github.com/SHGgo/gobig-front-end)）、后台管理系统（[gobig-admin](https://github.com/SHGgo/gobig-front-end)）、后端开发（[gobig-serve](https://github.com/SHGgo/gobig-serve)）四个方面。

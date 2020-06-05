@@ -79,7 +79,7 @@
     <select id="selectByTitle" resultMap="BaseResultMap">
         select *
         from video v
-        where v.title = like CONCAT('%',#{title},'%')
+        where v.title like CONCAT('%',#{title},'%')
         <if test="pageItemNum!=0 and pageItemNum!=null">
             limit #{pageStart},#{pageItemNum}
         </if>
